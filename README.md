@@ -5,4 +5,5 @@ UI Testing for a program that helps you order a burger at [Stellar Burgers](http
 
 ### Technologies used
 Java 11
+
 libraries: JUnit 4, Allure
