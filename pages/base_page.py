@@ -23,18 +23,22 @@ class BasePage:
     def get_text_from_element(self, locator):
         return self.find_element_with_wait(locator).text
 
-    def open_page(self, driver, url):
-        driver.get(url)
+    def open_page(self, url):
+        self.driver.get(url)
 
     def get_element_attribute(self, locator, attribute):
         return self.find_element_with_wait(locator).get_attribute(attribute)
 
-    def add_ingredients_to_basket(self, driver, basket_locator, ingredient_locator):
+    def add_ingredients_to_basket(self, basket_locator, ingredient_locator):
         basket = self.find_element_with_wait(basket_locator)
         ingredient = self.find_element_with_wait(ingredient_locator)
-        return drag_and_drop(driver, ingredient, basket)
+        return drag_and_drop(self.driver, ingredient, basket)
 
     def switch_to_window(self, locator, num):
         new_window = self.driver.window_handles[num]
         self.driver.switch_to.window(new_window)
         return self.find_element_with_wait(locator)
+
+    def wait_element_is_not_located(self, locator):
+        (WebDriverWait(self.driver, 15).until_not(
+            expected_conditions.visibility_of_element_located(locator)))

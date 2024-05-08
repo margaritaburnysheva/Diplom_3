@@ -1,24 +1,25 @@
 import allure
 
 from constants import Constants
-from locators.forgot_password_page_locators import ForgotPasswordPageLocators
-from locators.header_locators import HeaderLocators
 from locators.login_page_locators import LoginPageLocators
-from locators.main_page_locators import MainPageLocators
 from pages.base_page import BasePage
 
 
 class LoginPage(BasePage):
+    @allure.step('Получить текст кнопки "Войти"')
+    def get_text_from_login_button_login_page(self):
+        return self.get_text_from_element(LoginPageLocators.LOGIN_BUTTON_LOGIN_PAGE)
+
     @allure.step('Кликнуть по сслыке "Восстановить пароль"')
-    def check_click_to_link_password_recovery(self, driver):
-        self.open_page(driver, Constants.LOGIN_PAGE_URL)
+    def check_click_to_link_password_recovery(self):
+        self.open_page(Constants.LOGIN_PAGE_URL)
         self.find_element_with_wait(LoginPageLocators.LINK_PASSWORD_RECOVERY)
         self.click_to_element(LoginPageLocators.LINK_PASSWORD_RECOVERY)
-        self.find_element_with_wait(ForgotPasswordPageLocators.BUTTON_RECOVERY_FORGOT_PASSWORD_FORM)
 
-    @allure.step('Кликнуть по ссылке "Конструктор"')
-    def check_click_to_constructor(self, driver):
-        self.open_page(driver, Constants.LOGIN_PAGE_URL)
-        self.click_to_element(HeaderLocators.CONSTRUCTOR_LOCATOR)
-        result_text = self.find_element_with_wait(MainPageLocators.LOGIN_BUTTON_MAIN_PAGE).text
-        return result_text
+    @allure.step('Логин пользователя"')
+    def user_login(self, user_data):
+        self.open_page(Constants.LOGIN_PAGE_URL)
+        self.add_text_to_element(LoginPageLocators.EMAIL_INPUT_FORM_LOGIN, user_data["email"])
+        self.add_text_to_element(LoginPageLocators.PASSWORD_INPUT_FORM_LOGIN, user_data["password"])
+        self.click_to_element(LoginPageLocators.LOGIN_BUTTON_LOGIN_PAGE)
+        self.wait_element_is_not_located(LoginPageLocators.LOGIN_BUTTON_LOGIN_PAGE)
